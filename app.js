@@ -30,7 +30,8 @@ const fatherReligionInput = document.getElementById('fatherReligionInput');
 const furtherInformation = document.getElementById('furtherInformation');
 
 // Get submit button
-const submitBtn = document.getElementById('submitBtn');
+const encryptBtn = document.getElementById('encryptBtn');
+const sendToContract = document.getElementById('sendToContract');
 
 //for quick testing 
 const setValuesToFormForTesting = () => {
@@ -214,13 +215,19 @@ const isValidForm = () => {
   
   return valid;
 }
+//encrypted payload
+var encryptedPayload;
+var transactionData;
 
-//var modalTestButton = document.getElementById('modalTestButton');
-var spinner = document.getElementById('mySpinner')
-var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+//We get spinner elements
+var spinner = document.getElementById('mySpinner');
+var spinner2 = document.getElementById('mySpinner2');
+
+var myModal = new bootstrap.Modal(document.getElementById('myModal'));
 const modalBody = document.getElementById('injectText');
-// Add a click event listener to the button
-submitBtn.addEventListener("click", async function (event) {
+
+// Add a click event listener to the encrypt button
+encryptBtn.addEventListener("click", async function (event) {
   event.preventDefault();
 
   const birthAct = [registryOffice.value, registrationNumber.value,
@@ -230,38 +237,37 @@ submitBtn.addEventListener("click", async function (event) {
   replaceIfEmpty(furtherInformation)];
 
   console.log(birthAct);
-  //console.log('furtherInformation',furtherInformation.value.length);
-  //testRequest();
 
-  
   const result = isValidForm();
   if (result) {
     
-     // Show the spinner
+  // Show the spinner
   spinner.removeAttribute("hidden");
   // Disable the button to prevent multiple clicks
-  submitBtn.disabled = true;
-  //spinner.textContent = 'Encrypting...'
-  console.log(spinner.hidden);
+  encryptBtn.disabled = true;
   setTimeout(async() => {
-    const encryptedPayload = await sendPayloadToEncryptionService('05b3ef07de3d49491f7459202ba96fa215abbba696300710ae78837f47652cf8844cbbeb84b552e3d06c1624c1d2cabe98da16b525b102914eb7fbe7b3f8a23f',birthAct);
+    encryptedPayload = await sendPayloadToEncryptionService('05b3ef07de3d49491f7459202ba96fa215abbba696300710ae78837f47652cf8844cbbeb84b552e3d06c1624c1d2cabe98da16b525b102914eb7fbe7b3f8a23f',birthAct);
   spinner.setAttribute("hidden", "");
   spinner.textContent = ''
-  submitBtn.textContent = "Encryption Done";
+  encryptBtn.textContent = "Encryption Done";
   console.log(encryptedPayload);
+  //we enable the button
+  sendToContract.removeAttribute("disabled");
+  
   }, 3000);
   
-
   } else {
     console.log('form incomplete');
   }
-
-
-
-
-
-
 });
+
+sendToContract.addEventListener('click', async (event) => {
+  event.preventDefault();
+  transactionData = await sendEncryptedPayloadToContract(encryptedPayload)
+  console.log(transactionData);
+})
+
+
 
 /*
 modalTestButton.onclick = async function () {
