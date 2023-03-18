@@ -217,6 +217,7 @@ const isValidForm = () => {
 }
 //encrypted payload
 var encryptedPayload;
+var transactionData;
 
 //We get spinner elements
 var spinner = document.getElementById('mySpinner');
@@ -260,9 +261,10 @@ encryptBtn.addEventListener("click", async function (event) {
   }
 });
 
-sendToContract.addEventListener('click', (event) => {
+sendToContract.addEventListener('click', async (event) => {
   event.preventDefault();
-  console.log(encryptedPayload);
+  transactionData = await sendEncryptedPayloadToContract(encryptedPayload)
+  console.log(transactionData);
 })
 
 
