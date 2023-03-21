@@ -10,8 +10,8 @@
   
   body {
     font-family: "Lato", "Helvetica", Helvetica, sans-serif;
-    background: #aa9a96;
-    color: #f7df1e;
+    background: #f2f2f2;
+    color: #090909;
     font-size: 1.8rem;
     padding: 1.2rem;
     letter-spacing: 1px;
@@ -63,24 +63,6 @@
     cursor: pointer;
   }
   
-  .link {
-    display: inline-block;
-    margin-bottom: 1rem;
-  }
   
-  .repo {
-    padding: 2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
   
-  .repo-title {
-    color: #0366d6;
-    text-decoration: none;
-    font-weight: 300;
-  }
-  
-  .repo-description {
-    margin-top: 1rem;
-    color: #ccc;
-  }
   
