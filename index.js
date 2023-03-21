@@ -52,9 +52,13 @@ app.post("/birthact", (req, res) => {
       username: name,
     });
   } else {
-    res.render("failure");
+    res.render("403-forbidden");
   }
 });
+
+app.get("/birthact", (req, res) => {
+    res.status(403).render("403-forbidden");
+})
 
 app.get("/repos", async (req, res) => {
   const username = req.query.username || "myogeshchavan97";
@@ -75,6 +79,18 @@ app.get("/repos", async (req, res) => {
     res.status(400).send("Error while getting list of repositories");
   }
 });
+
+// Handle 404 errors
+app.use(function(req, res, next) {
+    res.status(404).render("404-not-found");
+
+  });
+  
+  // Handle other errors
+  app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });
 
 app.listen(3001, () => {
   console.log("server started on port 3000");
