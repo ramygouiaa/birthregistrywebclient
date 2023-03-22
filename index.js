@@ -3,6 +3,8 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const path = require("path");
 
+const port = process.env.PORT || 4000;
+
 const jwt = require('jsonwebtoken');
 const { expressjwt: ejwt } = require("express-jwt");
 const uuid = require('uuid');
@@ -92,6 +94,6 @@ app.use(function(req, res, next) {
     res.status(500).send('Something broke!');
   });
 
-app.listen(3001, () => {
-  console.log("server started on port 3000");
+app.listen(port, () => {
+  console.log(`Birth act service client listening at http://localhost:${port}`);
 });
