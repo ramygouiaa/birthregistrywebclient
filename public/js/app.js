@@ -33,6 +33,9 @@ const furtherInformation = document.getElementById('furtherInformation');
 const encryptBtn = document.getElementById('encryptBtn');
 const sendToContract = document.getElementById('sendToContract');
 
+//get the file input
+const fileInput = document.getElementById('formFile');
+
 //for quick testing 
 const setValuesToFormForTesting = () => {
   
@@ -52,6 +55,56 @@ const setValuesToFormForTesting = () => {
   fatherFamilyName.value = 'gouiaa';
   fatherBirthName.value = 'tissaoui';
   fatherSurname.value = 'lobna';
+
+}
+
+// load data to the inputs from loaded file
+const setFormValuesFormLoadedFile = (obj) => {
+  
+/*
+  {
+    : "endoftext",
+    Geburtsort: "Oberhausen Sterkrade /",
+    Geburtstag: "15/12/1990",
+    Geburtsurkund: "Geburtsurkunde",
+    Geschlecht: "Männlich",
+    K: "Siegel Urkundsperson ggäj",
+    KindGeburtsname: "Gouiaa",
+    KindVornamen: "Ramy",
+    MutterFamilienname: "Gouiaa",
+    MutterGeburtsname: "Tissaoui",
+    MutterVornamen: "Lobna /",
+    Ort: "Tag   5 X",
+    Registernummer: "1234/4321",
+    Religion: "Islamisch",
+    Standesamt: "berlin behörde",
+    VaterFamilienname: "Gouiaa",
+    VaterGeburtsname: "Gouiaa",
+    VaterVornamen: "Ghosn Z a g"
+  }
+*/
+  registryOffice.value = obj.Standesamt;
+  registrationNumber.value = obj.Registernummer;
+
+  childName.value = obj.KindGeburtsname;
+  childSurname.value = obj.KindVornamen;
+  birthDate.value = obj.Geburtstag;
+  placeOfBirth.value = obj.Geburtsort;
+  if (obj.Geschlecht === "Männlich") {
+    const childSexM = document.getElementById("childSexM");
+  childSexM.checked = true;
+  }else {
+    const childSexF = document.getElementById("childSexF");
+  childSexF.checked = true;
+  }
+  
+  motherFamilyName.value = obj.MutterFamilienname;
+  motherBirthName.value = obj.MutterGeburtsname;
+  motherSurname.value = obj.MutterVornamen;
+
+  fatherFamilyName.value = obj.VaterFamilienname;
+  fatherBirthName.value = obj.VaterGeburtsname;
+  fatherSurname.value = obj.VaterVornamen;
 
 }
 
@@ -226,6 +279,20 @@ var spinner2 = document.getElementById('mySpinner2');
 var myModal = new bootstrap.Modal(document.getElementById('myModal'));
 const modalBody = document.getElementById('injectText');
 
+//listen to the input change and load the parsed data into the form
+fileInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = (event) => {
+      const image = new Image();
+      image.src = event.target.result;
+      image.onload = () => {
+        recognizeText(image);
+      };
+  };
+});
+
 // Add a click event listener to the encrypt button
 encryptBtn.addEventListener("click", async function (event) {
   event.preventDefault();
@@ -266,6 +333,7 @@ sendToContract.addEventListener('click', async (event) => {
   transactionData = await sendEncryptedPayloadToContract(encryptedPayload)
   console.log(transactionData);
 })
+
 
 
 
