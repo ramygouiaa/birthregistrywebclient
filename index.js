@@ -85,14 +85,22 @@ app.get("/repos", async (req, res) => {
 // Handle 404 errors
 app.use(function(req, res, next) {
     res.status(404).render("404-not-found");
-
   });
   
-  // Handle other errors
-  app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-  });
+  // Error handling middleware
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Process event listeners
+process.on('uncaughtException', function(err) {
+  console.error('Uncaught Exception:', err.stack);
+});
+
+process.on('unhandledRejection', function(reason, promise) {
+  console.error('Unhandled Rejection:', reason.stack || reason);
+});
 
 app.listen(port, () => {
   console.log(`Birth act service client listening at http://localhost:${port}`);
